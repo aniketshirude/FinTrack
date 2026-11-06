@@ -1,93 +1,114 @@
 # FinTrack
 
-FinTrack is a Django personal finance tracker that brings everyday spending and financial records together in one dashboard. Track expenses, recurring payments, savings, investments, loans, EMIs, and insurance; review financial summaries and budget alerts; and keep documents organized in a PIN-protected vault.
+FinTrack is a Django web application for keeping everyday finance records and summaries in one place. Record expenses, savings, investments, loans, and insurance policies; review EMI estimates, recurring payments, budget alerts, and analytics from the dashboard.
 
-## Features
+## What you can do
 
-- **Expense tracking:** Add, categorize, review, edit, and delete expenses.
-- **Recurring transactions:** Manage recurring expenses, bills, savings, and investments.
-- **Savings and investments:** Track savings and investment holdings by category, quantity, invested amount, and current value.
-- **Loans and EMI planning:** Manage loans and calculate monthly EMIs, total repayments, and interest.
-- **Insurance policies:** Record policy types, coverage, premiums, and upcoming premium dates.
-- **Dashboard and analytics:** Review income, expenses, savings, investments, loans, and budget status.
-- **Budget tools:** Compare spending with suggested budget targets and view alerts.
-- **Document vault:** Upload and manage documents through a PIN-protected area.
-- **Search and finance chatbot:** Search financial records and ask the built-in chatbot about the financial summary.
-- **Optional integrations:** The code includes mutual-fund data lookup, Experian integration scaffolding, and WhatsApp reports and alerts. These require additional configuration; some integration data is mocked or intended for development.
+### Track spending and plan a budget
+
+- Add expenses, assign categories such as food, transport, bills, entertainment, EMI, or other, and edit or remove records.
+- Set up recurring expenses and bills with weekly or monthly schedules and a payment day.
+- View spending summaries and category breakdowns on the dashboard and analytics page.
+- Compare needs, wants, and savings against a 50/30/20 budget guideline and review budget alerts.
+
+### Manage savings, investments, loans, and policies
+
+- Record savings and investment contributions.
+- Categorize investments (including stocks, mutual funds, gold, fixed deposits, real estate, and crypto) and track quantity, invested amount, and current value.
+- Set recurring savings or investment contributions.
+- Store loan principal, annual interest rate, tenure, and start date; calculate estimated monthly EMI, total repayment, and interest.
+- Record insurance policy type, sum assured, premium, and next premium due date.
+- Review income and financial summaries alongside recent activity.
+
+### Keep documents and find information
+
+- Upload and browse documents in the document vault, with a PIN setup/unlock flow.
+- Search financial records.
+- Ask the built-in chatbot questions about the available financial summary.
+
+### Optional integrations
+
+The code includes mutual-fund NAV lookup, Experian integration scaffolding, and WhatsApp report/alert flows. These integrations are not all ready for production: some responses or portfolio entries are mock/demo data, and provider credentials or local setup may be required.
 
 ## Technology
 
-- Python
+- Python 3.12+
 - Django
 - SQLite for local development
 - HTML, CSS, and JavaScript
 
 ## Run locally
 
-### 1. Prerequisites
+### Prerequisites
 
-Install Python 3 and Git.
+Install Python 3.12 or newer and Git.
 
-### 2. Clone the repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/aniketshirude/FinTrack.git
 cd FinTrack/EMIProject
 ```
 
-### 3. Create and activate a virtual environment
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-On Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-On macOS or Linux:
+macOS or Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-### 4. Install dependencies
+### 3. Install dependencies
 
-The repository does not currently include a dependency lock or requirements file. Install the packages used by the app:
+There is currently no `requirements.txt` in the repository. Install the packages used by the app:
 
 ```bash
-python -m pip install Django requests pywhatkit
+python -m pip install Django requests python-dateutil
 ```
 
-### 5. Apply migrations and create an account
+To try the optional WhatsApp flow, install its additional package:
+
+```bash
+python -m pip install pywhatkit
+```
+
+### 4. Set up the database and account
 
 ```bash
 python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 6. Start the development server
+Alternatively, open `/register/` after starting the server to use the app's registration page.
+
+### 5. Start the development server
 
 ```bash
 python manage.py runserver
 ```
 
-Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser and sign in.
+Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and sign in.
 
 ## Configuration
 
-For local development, the application uses SQLite and generates a temporary Django secret key if `DJANGO_SECRET_KEY` is not set.
-
-For a non-debug environment, configure a strong secret key and set debug mode off before starting the application:
+For local development, the app uses SQLite and generates a temporary Django secret key when `DJANGO_SECRET_KEY` is not set. For deployments, set a strong secret key and disable debug mode:
 
 ```text
 DJANGO_DEBUG=False
 DJANGO_SECRET_KEY=<your-secret-key>
 ```
 
-The chatbot and external-service settings can be provided through environment variables when needed:
+Optional chatbot and Experian settings are read from environment variables:
 
 ```text
 GOOGLE_API_KEY=<your-google-api-key>
@@ -96,7 +117,7 @@ EXPERIAN_API_KEY=<your-experian-api-key>
 EXPERIAN_BASE_URL=<your-experian-api-base-url>
 ```
 
-Do not commit real credentials, local databases, or personal documents to the repository. Optional integrations may require provider credentials, account setup, and additional production configuration.
+Never commit real credentials, personal financial records, the local database, or uploaded documents.
 
 ## Run tests
 
@@ -106,19 +127,20 @@ From the `EMIProject` directory:
 python manage.py test
 ```
 
-## Repository layout
+## Project structure
 
 ```text
 EMIProject/
-├── accounts/       # Account and profile functionality
-├── config/         # Django project configuration
-├── core/           # Finance features, dashboard, and integrations
-├── expenses/       # Expense and recurring expense functionality
+├── accounts/       # Registration and profile functionality
+├── config/         # Django settings and URL configuration
+├── core/           # Dashboard, financial records, analytics, and integrations
+├── expenses/       # Expense and recurring expense features
 ├── static/         # CSS, JavaScript, and image assets
 └── templates/      # Django HTML templates
 ```
 
-## Notes
+## Important notes
 
-- The repository intentionally excludes the local SQLite database, uploaded media, and generated files. A fresh setup creates its database by running migrations.
-- This project is intended for learning and local development. Review Django's deployment checklist and configure production security, allowed hosts, database, static/media storage, and integration credentials before deploying.
+- The repository excludes the local SQLite database, uploaded media, and generated files. Run migrations to create a fresh local database.
+- Before using real financial data or allowing multiple accounts, review the data model and access controls: not all financial record models are explicitly associated with an individual account.
+- This project is intended for development and learning. Before deployment, configure production-grade secrets, `ALLOWED_HOSTS`, database and media storage, HTTPS, and any required integration credentials; review Django's deployment checklist.
